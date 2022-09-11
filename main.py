@@ -1,11 +1,9 @@
 import BoardFunctions.Display as Display
 import BoardFunctions.Board as Board
-
-import MessageFunctions.main as Messages
 import BoardFunctions.Transformer as Transformer
 
 import MessageFunctions.transformations as transformations
-import MessageFunctions.letters as letters
+import MessageFunctions.groups as groups
 
 
 def main():
@@ -14,17 +12,14 @@ def main():
 
     frame = []
     space = [False]*8
-    char = letters.ZERO
-    line1 = [[0,1,2,3,4,5,6,7]]
-    for i in range(8):
-        frame += transformations.letter_form_to_onoff_form(char)
-        frame.append(space)
+    for c in groups.lowercase:
+        frame += transformations.letter_form_to_onoff_form(c)
         frame.append(space)
         frame.append(space)
 
 
     arr = transformations.onoff_form_to_array_form(frame)
-    color = transformations.tf_array_to_color(arr)
+    color = transformations.tf_array_to_color(arr, color=(54, 208, 255))
     board.data = color
 
     ctr = 0
@@ -35,11 +30,10 @@ def main():
             
             frame = Transformer.scroll(frame, wrap=True)
             arr = transformations.onoff_form_to_array_form(frame)
-            color = transformations.tf_array_to_color(arr)
+            color = transformations.tf_array_to_color(arr, color=(54, 208, 255))
             board.data = color
 
-                
-            
+                   
             ctr = 0
         disp.loop()
     

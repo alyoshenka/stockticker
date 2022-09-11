@@ -3,28 +3,46 @@ import pprint as pp
 
 import json
 
-tickers = json.load(open('./assets/data/tickers.json', 'r'))['tickers']
+def tickers():
+    """Get all tickers listed in ./assets/data/tickers.json"""
+    try:
+        return json.load(open('./assets/data/tickers.json', 'r'))['tickers']
+    except Exception as e:
+        print("ERROR:", e)
 
-for tick in tickers:
+def get_ticker_data(sym):
+    """"Query and return formatted data from a ticker symbol"""
+    try:
+        data = yf.Ticker(str(sym))
+    except Exception as e:
+        print("ERROR", e)
+        return None
 
-
-    data = yf.Ticker(str(tick))
     info = data.info
-
-    #pp.pprint(tsla.info)
-
-    hist = data.history(period='5d')
-    #pp.pprint(hist)
+    #hist = data.history(period='5d')
     
-
     close = info['previousClose']
-    openP = info['open']
-    high = info['dayHigh']
-    low = info['dayLow']
+    #openP = info['open']
+    #high = info['dayHigh']
+    #low = info['dayLow']
     cur = info['currentPrice']
+    name = info['shortName']
+    symbol = info['symbol']
 
     delta = cur - close
 
-    #print('current:', cur, 'open:', openP, 'high:', high, 'low:', low, 'close:', close)
+    obj = {
+        "symbol": symbol,
+        "name": name,
+        "dollarDelta": delta,
+        "percentDelta": delta/close*100,
+        "up?": delta > 0
+    }
+    return obj
 
-    print(tick, ':', '${0:0.2f} {1:0.2f}%'.format(delta, delta/close*100))
+def print_all_tickers():
+    """Print data from all stock tickers in tickers.json"""
+    for tick in tickers():
+        obj = get_ticker_data(tick)
+
+        print(obj['symbol'], ('(' + obj['name'] + ')'), ':', '${0:0.2f} {1:0.2f}%'.format(obj['dollarDelta'], obj['percentDelta']))
