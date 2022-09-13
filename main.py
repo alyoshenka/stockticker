@@ -7,6 +7,8 @@ import MessageFunctions.groups as groups
 
 import DataFunctions.collection as collection
 
+import time
+
 
 def main():
     board = Board.Board(32*8)
@@ -23,7 +25,8 @@ def main():
     
     tickers = collection.tickers()
     # initialize the first 3 tickers
-    for i in range(len(tickers)):
+    #for i in range(len(tickers)):
+    for i in range(3):
         ticker = collection.get_ticker_data(tickers[i])
         # translate to frame
         frame += ticker_data_to_letter_form(ticker)
@@ -37,9 +40,11 @@ def main():
 
     ctr = 0
 
+    start_time = time.time()
+    time_between = 0.2
+
     while not disp.shouldExit:
-        ctr += 1
-        if ctr > 200:
+        if time.time() - start_time > time_between:
             
             frame = Transformer.scroll(frame, wrap=True)
             arr = transformations.onoff_form_to_array_form(frame)
@@ -47,7 +52,7 @@ def main():
             board.data = arr
 
                    
-            ctr = 0
+            start_time = time.time()
         disp.loop()
 
 def ticker_data_to_letter_form(tick):
