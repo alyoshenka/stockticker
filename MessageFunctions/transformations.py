@@ -1,9 +1,9 @@
 import MessageFunctions.groups as groups
 
-def letter_form_to_onoff_form(arr):
+def letter_form_to_onoff_form(arr, on=True, off=False):
     """
     transform letters made as indexed lines into full-height lines
-    using True/False
+    using on/off (set to True/False by default; change to set colors)
 
     [ [1,2], [3,7], ... ]
         ->
@@ -13,9 +13,9 @@ def letter_form_to_onoff_form(arr):
     col_idx = 0
     on_indexes = []
     for col in arr:
-        line = [False]*8
+        line = [off]*8
         for item in col:
-            line[item] = True
+            line[item] = on
         on_indexes.append(line)
     return on_indexes
 
@@ -35,7 +35,7 @@ def tf_array_to_color(arr, color=(255,255,255)):
 
     return list(map(lambda on: color if on else None, arr))
 
-def string_to_letter_form(string):
+def string_to_letter_form(string, color):
 
     space = [False]*8
 
@@ -56,7 +56,7 @@ def string_to_letter_form(string):
     data = []
     for char in string:
         formatted = get_formatted(char)
-        data += letter_form_to_onoff_form(formatted)
+        data += letter_form_to_onoff_form(formatted, on=color)
         data.append(space)
     return data       
 

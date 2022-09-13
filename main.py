@@ -23,7 +23,7 @@ def main():
     
     tickers = collection.tickers()
     # initialize the first 3 tickers
-    for i in range(3):
+    for i in range(len(tickers)):
         ticker = collection.get_ticker_data(tickers[i])
         # translate to frame
         frame += ticker_data_to_letter_form(ticker)
@@ -32,19 +32,19 @@ def main():
 
 
     arr = transformations.onoff_form_to_array_form(frame)
-    color = transformations.tf_array_to_color(arr, color=(54, 208, 255))
-    board.data = color
+    #color = transformations.tf_array_to_color(arr, color=(54, 208, 255))
+    board.data = arr
 
     ctr = 0
 
     while not disp.shouldExit:
         ctr += 1
-        if ctr > 300:
+        if ctr > 200:
             
             frame = Transformer.scroll(frame, wrap=True)
             arr = transformations.onoff_form_to_array_form(frame)
-            color = transformations.tf_array_to_color(arr, color=(54, 208, 255))
-            board.data = color
+            #color = transformations.tf_array_to_color(arr, color=(54, 208, 255))
+            board.data = arr
 
                    
             ctr = 0
@@ -54,13 +54,15 @@ def ticker_data_to_letter_form(tick):
     space = [False]*8
     data = []
 
-    data += transformations.string_to_letter_form(tick["symbol"])
+    color =  (0,255,0) if tick["up?"] else (255,0,0)
+
+    data += transformations.string_to_letter_form(tick["symbol"], (54, 208, 255))
     data.append(space)
     data.append(space)
-    data += transformations.string_to_letter_form("$" + str(tick["dollarDelta"]))
+    data += transformations.string_to_letter_form("$" + str(tick["dollarDelta"]),color)
     data.append(space)
     data.append(space)
-    data += transformations.string_to_letter_form(str(tick["percentDelta"]) + "%")
+    data += transformations.string_to_letter_form(str(tick["percentDelta"]) + "%", color)
 
     return data
     
