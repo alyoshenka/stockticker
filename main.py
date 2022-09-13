@@ -5,17 +5,30 @@ import BoardFunctions.Transformer as Transformer
 import MessageFunctions.transformations as transformations
 import MessageFunctions.groups as groups
 
+import DataFunctions.collection as collection
+
 
 def main():
     board = Board.Board(32*8)
-    disp = Display.Display(board, 8, 32)
+    disp = Display.Display(board, 8, 32, size=25)
 
     frame = []
     space = [False]*8
+    """
     for c in groups.lowercase:
         frame += transformations.letter_form_to_onoff_form(c)
         frame.append(space)
         frame.append(space)
+    """
+    
+    tickers = collection.tickers()
+    # initialize the first 3 tickers
+    for i in range(3):
+        ticker = collection.get_ticker_data(tickers[i])
+        # translate to frame
+        frame += ticker_data_to_letter_form(ticker)
+        for i in range(4):
+            frame.append(space)
 
 
     arr = transformations.onoff_form_to_array_form(frame)
@@ -36,6 +49,20 @@ def main():
                    
             ctr = 0
         disp.loop()
+
+def ticker_data_to_letter_form(tick):
+    space = [False]*8
+    data = []
+
+    data += transformations.string_to_letter_form(tick["symbol"])
+    data.append(space)
+    data.append(space)
+    data += transformations.string_to_letter_form("$" + str(tick["dollarDelta"]))
+    data.append(space)
+    data.append(space)
+    data += transformations.string_to_letter_form(str(tick["percentDelta"]) + "%")
+
+    return data
     
 
 main()

@@ -34,8 +34,8 @@ def get_ticker_data(sym):
     obj = {
         "symbol": symbol,
         "name": name,
-        "dollarDelta": delta,
-        "percentDelta": delta/close*100,
+        "dollarDelta": round(delta, 2),
+        "percentDelta": round(delta/close*100, 2),
         "up?": delta > 0
     }
     return obj
