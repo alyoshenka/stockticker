@@ -1,21 +1,21 @@
 import yfinance as yf
-import pprint as pp
-
 import json
+from data.transformation import ticker_obj_to_string
 
-def tickers():
+def get_tickers():
     """Get all tickers listed in ./assets/data/tickers.json"""
     try:
-        return json.load(open('./assets/data/tickers.json', 'r'))['tickers']
-    except Exception as e:
-        print("ERROR:", e)
+        return json.load(open('../assets/data/tickers.json', 'r'))['tickers']
+    except Exception as err:
+        print("ERROR:", err)
+        return None
 
 def get_ticker_data(sym):
     """"Query and return formatted data from a ticker symbol"""
     try:
         data = yf.Ticker(str(sym))
-    except Exception as e:
-        print("ERROR", e)
+    except Exception as err:
+        print("ERROR", err)
         return None
 
     info = data.info
@@ -40,9 +40,11 @@ def get_ticker_data(sym):
     }
     return obj
 
+
 def print_all_tickers():
     """Print data from all stock tickers in tickers.json"""
-    for tick in tickers():
-        obj = get_ticker_data(tick)
+    for sym in get_tickers():
+        data = get_ticker_data(sym)
+        disp = ticker_obj_to_string(data)
+        print(disp)
 
-        print(obj['symbol'], ('(' + obj['name'] + ')'), ':', '${0:0.2f} {1:0.2f}%'.format(obj['dollarDelta'], obj['percentDelta']))
