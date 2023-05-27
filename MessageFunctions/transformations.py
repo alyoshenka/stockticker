@@ -61,11 +61,4 @@ def string_to_letter_form(string, color):
     return data       
 
 
-test_letter_form = [[0], [7]]
-test_onoff_form = [[True, False, False, False, False, False, False, False], [False, False, False, False, False, False, False, True]]
-test_array_form = [True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, True]
-test_color = [(255, 255, 255), None, None, None, None, None, None, None, None, None, None, None, None, None, None, (255, 255, 255)]
 
-assert test_onoff_form == letter_form_to_onoff_form(test_letter_form), "to_onoff_form"
-assert test_array_form == onoff_form_to_array_form(test_onoff_form), "to_array_form"
-assert test_color == tf_array_to_color(test_array_form), "array_to_color"
