@@ -1,0 +1,2 @@
+neopolitan>=0.1.26
+yfinance

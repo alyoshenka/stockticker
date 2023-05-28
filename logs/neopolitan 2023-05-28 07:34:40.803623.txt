@@ -1,0 +1,1 @@
+INFO:neopolitan:Initializing graphical display
